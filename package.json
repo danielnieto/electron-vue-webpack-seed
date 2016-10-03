@@ -1,5 +1,5 @@
 {
-  "name": "electron-vue-webpack seed",
+  "name": "electron-vue-webpack-seed",
   "version": "1.0.0",
   "description": "a seed project to use Vue + Electron and webpack with live reloading",
   "main": "main.js",
