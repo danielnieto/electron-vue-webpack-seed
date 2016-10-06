@@ -1,21 +1,46 @@
-var debug = process.env.NODE_ENV !== "production";
-var webpack = require('webpack');
+/* eslint strict: 0 */
+'use strict';
 
-module.exports = {
+const path = require('path');
+const webpack = require('webpack');
+
+let options ={
 watch: true,
-  context: __dirname,
-  devtool: debug ? "inline-sourcemap" : null,
-  entry: "./app/js/index.js",
-  resolve: {
-    alias: {vue: 'vue/dist/vue.js'}
+target: "electron",
+externals: {
+    'electron': 'require("electron")',
+    'net': 'require("net")',
+    'remote': 'require("remote")',
+    'shell': 'require("shell")',
+    'app': 'require("app")',
+    'ipc': 'require("ipc")',
+    'fs': 'require("fs")',
+    'buffer': 'require("buffer")',
+    'system': '{}',
+    'file': '{}'
 },
-  output: {
-    path: __dirname + "/app/bundles",
-    filename: "scripts.min.js"
+  module: {
+    loaders: [{
+      test: /\.jsx?$/,
+      loaders: [],
+      exclude: /node_modules/,
+    }]
   },
-  plugins: debug ? [] : [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ mangle: true, sourcemap: false }),
+  output: {
+    path: path.join(__dirname, 'app/build'),
+    publicPath: path.join(__dirname, 'src'),
+    filename: 'bundle.js',
+  },
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
+    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main'],
+    alias: {vue: 'vue/dist/vue.js'}
+  },
+  entry: [
+    './app/js/index',
   ],
+  debug: true,
+
 };
+
+module.exports = options;
